@@ -3,7 +3,7 @@ import shutil
 import zipfile
 import sys
 
-def split_zip(input_zip, max_size=100):
+def split_zip(input_zip, max_size=50):
     # Get the directory and filename from the input zip file
     input_dir, input_filename = os.path.split(input_zip)
 
@@ -76,10 +76,18 @@ def split_zip(input_zip, max_size=100):
         print(f'Created: {output_zip_name}')
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <input_zip_file>")
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <input_zip_file> [max_size_in_MB]")
         sys.exit(1)
 
     input_zip_file = sys.argv[1]
 
-    split_zip(input_zip_file)
+    max_size = 100  # default max_size if not provided
+    if len(sys.argv) == 3:
+        try:
+            max_size = float(sys.argv[2])
+        except ValueError:
+            print("Invalid max_size. Please provide a numeric value.")
+            sys.exit(1)
+
+    split_zip(input_zip_file, max_size)
